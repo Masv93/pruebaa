@@ -1,0 +1,115 @@
+<%- include('layout/header') %>
+<link rel="stylesheet" href="/css/usuarios.css">
+<body>
+    <class="container-row">
+        <div class="menu">
+            <% if(token.rol==="admin"){%>
+                <h1>Bienvenido Administrador <%= token.nombre %></h1>
+       <%     }else{%>
+        <h1>Bienvenido <%= token.nombre %></h1>
+    <%   } %> 
+        <h3>Usuario: <%= token.usuario %></h3>
+            <a href="/usuarios/cerrar" id="cerrar">Salir</a>
+        </div>
+        <% if(token.rol==="admin"){%>
+
+            
+            <div class="container">
+                <h3>Estudiantes</h3>
+                <a href="/students">Añadir </a>
+                <a href="/Edit">Editar</a>
+                <a href="/Delete">Eliminar</a>
+            </div>
+                <h3>Mostrar </h3>
+            <div class="container">
+                <a href="/students"> Lista</a>
+                <a href="/count">Total</a>
+                <a href="/search">Nombre</a>
+                <a href="/career">Carrera</a>
+                <a href="/usuarios/editar">ID</a>
+            </div>
+
+       <% }else{%>
+
+        <ul id="students-list">
+            <h2>Mostrar Estudiantes</h2>
+            <% students.forEach(student => { %>
+                <li>
+                    <div class="container">
+                        <p>ID: <%= student.id %> - Nombre: <%= student.nombre %></p>
+                        <p>Edad: <%= student.edad %> - Carrera: <%= student.carrera %></p>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    
+
+          <!-- Formulario para Buscar Estudiantes por Nombre -->
+    <div class="form-container">
+        <h2>Buscar Estudiantes por Nombre</h2>
+        <form id="search-form" onsubmit="searchStudent(event)">
+            <label for="search-name">Buscar por nombre:</label>
+            <input type="text" id="search-name" name="nombre" placeholder="Nombre del Estudiante">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+       <!-- Ajuste del Formulario para Buscar por Carrera -->
+       <div class="form-container">
+        <h2>Buscar por Carrera</h2>
+        <form id="search-career-form" onsubmit="searchCareer(event)">
+            <label for="search-career">Buscar por carrera:</label>
+            <input type="text" id="search-career" name="carrera" placeholder="Carrera">
+            <button type="submit">Buscar</button>
+        </form>
+    </div>
+
+    <div class="form-container">
+        <h2>Contar Estudiantes</h2>
+        <a href="/students/count">Mostrar Total de Estudiantes</a>
+    </div>
+
+        <div class="container">
+            
+            
+            <a href="/students">Mostrar lista de Estudiantes</a>
+            <a href="/count">Mostrar total de Estudiantes</a>
+            <a href="/search">Buscar por Nombre</a>
+            <a href="/career">Buscar por Carrera</a>
+            <a href="/usuarios/editar">Mostrar estudiante por ID</a>
+        </div>
+    <%   } %>
+    <div class="footer">
+        Integrantes:<br>
+        Br. Miguel Suarez. CI. V-28.206.469<br>
+        Profesor: Yerson Gonzalez<br>
+        Materia: Backend
+    </div>
+
+    <script>
+        function searchStudent(event) {
+            event.preventDefault(); // Evita el envío del formulario tradicional
+            const nombre = document.getElementById('search-name').value;
+            if (nombre) {
+                const url = `/students/search/${encodeURIComponent(nombre)}`; // Construye la URL
+                window.location.href = url; // Redirige a la URL de búsqueda
+            } else {
+                alert('Por favor, ingresa un nombre para buscar.');
+            }
+        }
+
+        function searchCareer(event) {
+            event.preventDefault(); // Evita el envío del formulario tradicional
+            const carrera = document.getElementById('search-career').value;
+            if (carrera) {
+                const url = `/students/carrera/${encodeURIComponent(carrera)}`; // Construye la URL con la carrera
+                window.location.href = url; // Redirige a la URL de búsqueda por carrera
+            } else {
+                alert('Por favor, ingresa una carrera para buscar.');
+            }
+        }
+    </script>
+    </div>
+
+</body>
+</html>
